@@ -10,6 +10,7 @@ Description: A terminal trivia game using Python socket programming
 3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the player with the most correct answers wins!
 
 **Rules and Logistics**
+* The game will be interfaced via the terminal. 
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
 * 10 questions will be presented to both users. The server will wait until both players respond before proceeding. 
