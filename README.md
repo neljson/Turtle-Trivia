@@ -1,5 +1,5 @@
 
-![08f85ae5-2564-437c-a3d6-3f00916cacab](https://github.com/user-attachments/assets/7728b4e0-2257-44a0-ac22-bce1c939f9e4 =250x250)
+<img src="https://github.com/user-attachments/assets/7728b4e0-2257-44a0-ac22-bce1c939f9e4" width="250" height="250" />
 
 # Turtle-Trivia
 Description: A terminal trivia game using Python socket programming
