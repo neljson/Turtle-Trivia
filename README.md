@@ -6,15 +6,23 @@ Description: A terminal trivia game using Python socket programming
 
 ## How to Run
 
-First start the server:
+First start the server then run the client. If you run the client without any command-line arguments, it will default to connecting to localhost on port 12345. However, it is recommended
+to run the client and server by specifying a host and port number:
 
 ```sh
-python3 server.py
+python3 server.py <host> <port>
+python3 client.py <host> <port>
 ```
-Then start the client:
+
+Example of starting the server:
 
 ```sh
-python3 client.py
+ python3 server.py 127.0.0.1 8080
+```
+Example of starting the client:
+
+```sh
+python3 client.py 127.0.0.1 8080
 ```
 
 **How to play:**
