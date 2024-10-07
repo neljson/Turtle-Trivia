@@ -75,17 +75,3 @@ Sprint 1 accomplishes the creation of a simple Python socket server (`server.py`
 3. **Error Handling and Logging**:
    - Implements error handling for connection issues, timeouts, and socket errors.
    - Logs connection attempts, successful connections, sent messages, and responses received from the server.
-
-### How to Run
-
-First start the server:
-
-```sh
-python3 server.py
-```sh
-Then start the client:
-
-```sh
-python3 server.py
-```sh
-
