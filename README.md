@@ -4,6 +4,19 @@
 # Turtle-Trivia
 Description: A terminal trivia game using Python socket programming
 
+## How to Run
+
+First start the server:
+
+```sh
+python3 server.py
+```sh
+Then start the client:
+
+```sh
+python3 server.py
+```sh
+
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
 2. **Connect clients:** Run the `client.py` script on two different machines or terminals.
@@ -69,10 +82,10 @@ First start the server:
 
 ```sh
 python3 server.py
-
+```sh
 Then start the client:
 
 ```sh
 python3 server.py
-
+```sh
 
