@@ -65,10 +65,14 @@ This project consists of a simple Python socket server (`server.py`) and client 
 
 ### How to Run
 
-#### 1. Running the Server
-
-To start the server, run:
+First start the server:
 
 ```sh
-python server.py
+python3 server.py
+
+Then start the client:
+
+```sh
+python3 server.py
+
 
