@@ -14,7 +14,7 @@ python3 server.py
 Then start the client:
 
 ```sh
-python3 server.py
+python3 client.py
 ```
 
 **How to play:**
