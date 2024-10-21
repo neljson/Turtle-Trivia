@@ -59,12 +59,12 @@ Added functionality and accomplishments in Sprint 2:
 - Player ID: This is used to identify the player sending or receiving the message.
 - Content: The main body of the message, which includes the actual data being sent (e.g., player name, answer, broadcast message).
 ### Message Types and Data Fields
-We use a set of well-defined message types to handle different interactions between the server and clients including join, waiting_for_player, broadcast, answer, and quit. 
+Used a set of well-defined message types to handle different interactions between the server and clients including join, waiting_for_player, broadcast, answer, and quit. 
 
 ### JSON Protocol for Serialization and Deserialization
-- We use JSON as the format for both serialization (converting data to a format for transmission) and deserialization (reconstructing data after receiving it).
-- Serialization: Before sending a message from the client to the server (or vice versa), we use Python’s json.dumps() function to serialize the message into a JSON string.
-- Deserialization: Upon receiving a message, we use json.loads() to deserialize the JSON string back into a Python dictionary for processing.
+- Used JSON as the format for both serialization (converting data to a format for transmission) and deserialization (reconstructing data after receiving it).
+- Serialization: Before sending a message from the client to the server (or vice versa), use Python’s json.dumps() function to serialize the message into a JSON string.
+- Deserialization: Upon receiving a message, use json.loads() to deserialize the JSON string back into a Python dictionary for processing.
 
 #### Server (`server.py`)
 - The server handles multiple client connections and maintains game state for each player as shown as printed output.
