@@ -53,8 +53,25 @@ python3 client.py 127.0.0.1 8080
 
 Features added in Sprint 3:
 
+1. Synchronized Turn Actions
+The server enforces turn-based gameplay, where each player must wait for the other to answer before proceeding to the next action. This is achieved by setting a flag, `answers_received`, which tracks whether both players have answered. Players cannot proceed until both responses are received.
+
+2. Game State Synchronization.
+Score Updates: After each trivia question, the server broadcasts the current game score tally, keeping both players up-to-date on each other's scores and progress.
+
+3. Disconnection Alerts
+Player Disconnection: If one player disconnects during gameplay, the server immediately alerts the other player with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status and prevents potential confusion during disconnections.
+
+4. Player Identification
+Username and Player ID: When joining the game, each player can enter a unique username, which is displayed to both players. Additionally, each player is assigned a unique Player ID, allowing for individualized responses and easy identification.
+
+6. Win Condition Tracking
+Winning the Game: The server actively tracks each player's score, with the first player to answer 5 questions correctly declared the winner. Once a player wins, the game concludes, and the server announces the winner to both players.
+
 #### TODO 
-Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
+1. Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
+2. Currently, I've only researched and created 6 turtle trivia questions along with their resulting answers and answer choice options. For the rest of the questions in the `question_bank.py`, I've placed placeholder text. The rest of the questions and answer choices will be filled out in the future.
+3. The game needs to broadcast a message to both players at the very start of the game to establish rules and the win condition, so both players know how to play the game. 
 
 -------------
 
