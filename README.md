@@ -69,7 +69,7 @@ Username and Player ID: When joining the game, each player can enter a unique us
 Winning the Game: The server actively tracks each player's score, with the first player to answer 5 questions correctly declared the winner. Once a player wins, the game concludes, and the server announces the winner to both players.
 
 7. Game Lobby:
-If one player joins first, a broadcast message is displayed 'Waiting for another player to join...'. The first joining playe will need to wait until the other player has joined before proceeding. Once both players are connected, the game proceeds. 
+If one player joins first, a broadcast message is displayed `Waiting for another player to join...`. The first joining playe will need to wait until the other player has joined before proceeding. Once both players are connected, the game proceeds. 
 
 #### TODO 
 1. Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
