@@ -71,8 +71,8 @@ Features added in Sprint 3:
 7. Game Lobby:
 - If one player joins first, a broadcast message is displayed `Waiting for another player to join...`. The first joining player will need to wait until the other player has joined before proceeding. Once both players are connected, the game proceeds.
 
-8. `question_bank.py` repository of trivia questions
-- A separate python file was created to hold a list of trivia questions, 4 choices (a,b,c,d), and the correct answer. The server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
+8. Repository of trivia questions
+- A separate python file called `question_bank.py`  was created to hold a list of trivia questions, 4 choices (a,b,c,d), and the correct answer. The server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
 
 #### TODO 
 1. Currently, I've only researched and created 6 turtle trivia questions along with their resulting answers and answer choice options. For the rest of the questions in the `question_bank.py`, I've placed placeholder text. The rest of the questions and answer choices will be filled out in the future.
