@@ -72,7 +72,8 @@ Winning the Game: The server actively tracks each player's score, with the first
 1. Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
 2. Currently, I've only researched and created 6 turtle trivia questions along with their resulting answers and answer choice options. For the rest of the questions in the `question_bank.py`, I've placed placeholder text. The rest of the questions and answer choices will be filled out in the future.
 3. The game needs to broadcast a message to both players at the very start of the game to establish rules and the win condition, so both players know how to play the game.
-4. Currently, both players can only give an action input of either 'answer' to proceed with answering the question or 'quit' to quit the game. It is not able to handle inputs other than these two choices. For the future, will need to provide error handling/input validation and re-prompt the user should they enter a response other than 'answer' or 'quit'. 
+4. Currently, both players can only give an action input of either 'answer' to proceed with answering the question or 'quit' to quit the game. It is not able to handle inputs other than these two choices. For the future, will need to provide error handling/input validation and re-prompt the user should they enter a response other than 'answer' or 'quit'.
+5. A timeout feature needs to be added should one of the players take an excessively long to answer a question. 
 
 -------------
 
