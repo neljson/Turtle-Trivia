@@ -63,7 +63,7 @@ Features added in Sprint 3:
 - Player Disconnection: If one player disconnects during gameplay, the server alerts the other player after their next action with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status. The player must wait for a new player to join if they wish to continue playing the game.
 
 5. Player Identification
-- Username and Player ID: When joining the game, each player can enter a unique username, which is displayed to both players. Additionally, each player is assigned a unique Player ID.
+- Username and Player ID: When joining the game, each player can enter their chosen username, which is displayed to both players. Additionally, each player is assigned a unique Player ID.
 
 6. Win Condition Tracking
 - Winning the Game: The server actively tracks each player's score, with the first player to answer 5 questions correctly declared the winner. Once a player wins, the game concludes, and the server announces the winner to both players.
