@@ -49,6 +49,15 @@ python3 client.py 127.0.0.1 8080
 
 -------------
 
+## Sprint 3 (11-03-24)
+
+Features added in Sprint 3:
+
+#### TODO 
+Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
+
+-------------
+
 ## Sprint 2 (10-20-24)
 
 Added functionality and accomplishments in Sprint 2:
