@@ -60,7 +60,7 @@ The server enforces turn-based gameplay, where each player must wait for the oth
 Score Updates: After each trivia question, the server broadcasts the current game score tally, keeping both players up-to-date on each other's scores and progress.
 
 3. Disconnection Alerts
-Player Disconnection: If one player disconnects during gameplay, the server immediately alerts the other player with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status and prevents potential confusion during disconnections.
+Player Disconnection: If one player disconnects during gameplay, the server alerts the other player after their next action with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status and prevents potential confusion during disconnections.
 
 4. Player Identification
 Username and Player ID: When joining the game, each player can enter a unique username, which is displayed to both players. Additionally, each player is assigned a unique Player ID, allowing for individualized responses and easy identification.
