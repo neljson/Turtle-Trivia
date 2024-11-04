@@ -34,10 +34,10 @@ python3 client.py 127.0.0.1 8080
 * The game will be interfaced via the terminal. 
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
-* 10 questions will be presented to both users. The server will wait until both players respond before proceeding. 
+* The same question will be presented to both clients. The server will wait until both players respond before proceeding. 
 * There will be a timeout feature of 30 seconds. If the user has not selected an answer within 30 seconds, that user will not receive any points for that question. The server scores the other responding user and then proceeds to the next question.
-* After 10 questions, a winner will be determined by the most number of correct answers.
-* A draw will be determined if both users answered the same number of correct answers. Both players will be determined winners. 
+* The first player to get 5 questions correct will be declared the winner. 
+* A draw will be determined if both users reached 5 correct answers at the same time. 
 
 
 **Technologies used:**
