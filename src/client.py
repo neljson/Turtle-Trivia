@@ -24,7 +24,8 @@ def start_client(host, port):
     client_socket = None
     player_id = None  # This will be assigned by the server on join
     player_ready = False  # This flag indicates when a second player has joined
-
+    question_received = False
+    exit_game = False
     try:
         # Create a TCP socket
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,12 +38,12 @@ def start_client(host, port):
         player_name = input("Enter your player name: ")
         join_message = create_message("join", None, player_name)
         client_socket.sendall((join_message + "\n").encode('utf-8'))
-        logging.info(f"Sent join message: {join_message}")
+        #logging.info(f"Sent join message: {join_message}")
 
         buffer = ""
 
         # Main communication loop
-        while True:
+        while not exit_game: 
             # Receive data from the server, appending to buffer
             buffer += client_socket.recv(1024).decode('utf-8')
 
@@ -52,10 +53,41 @@ def start_client(host, port):
                 response_data = json.loads(response)
 
                 if response_data["type"] == "broadcast":
-                    # A broadcast message indicates another player has joined
-                    print(f"\n[BROADCAST]: {response_data['content']}")
-                    logging.info(f"Broadcast message: {response_data['content']}")
-                    player_ready = True  # Second player has joined, allow actions
+                    content = response_data['content']
+                    if content.startswith('{"type": "question"'):
+                        broadcast_content = json.loads(content)  # Parse here
+                        print(f"\n[QUESTION]: {broadcast_content["question"]}")
+                        print("Options:")   
+                        for option in broadcast_content['options']:
+                            print(f"- {option}: {broadcast_content['options'][option]}")
+                        question_received=True
+                    elif content.startswith('{"type": "score_update"'):
+                         score_content = json.loads(content)
+                         if score_content["type"] == "score_update":
+                            # Scores has been received, display options
+                            print(f"{score_content['commentary']}")
+                            print(f"{score_content['currentScore']}")
+                    elif content.startswith('{"type": "disconect"'):
+                         print(f"\n[BROADCAST]: {response_data['content']}")
+                         player_ready = False #Will wait for second player
+                         print("\n[INFO]: Waiting for another player to join...")
+                    elif "Do you wish to play again?" in response_data['content']:
+                        # print(f"\n[BROADCAST]: {content}")
+                        restart_response = input("Do you want to play again? (y/n): ").strip().lower()
+                        if restart_response == "y":
+                            restart_message = create_message("restart", player_id, "y")
+                            client_socket.sendall((restart_message + "\n").encode('utf-8'))
+                        else:
+                            print("Exiting the game.")
+                            quit_message = create_message("quit", player_id, "Goodbye!")
+                            client_socket.sendall((quit_message + "\n").encode('utf-8'))
+                            exit_game = True  # Set flag to exit both loops
+                            break
+                    else:
+                        # A broadcast message indicates another player has joined
+                        print(f"\n[BROADCAST]: {response_data['content']}")
+                        #logging.info(f"Broadcast message: {response_data['content']}")
+                        player_ready = True  # Second player has joined, allow actions
 
                 elif response_data["type"] == "waiting":
                     print("\n[INFO]: Waiting for the other player to answer...")
@@ -70,26 +102,31 @@ def start_client(host, port):
                 elif response_data["type"] == "join":
                     # Confirmation message that the player has joined successfully
                     print(f"\n[INFO]: {response_data['content']}")
-                    logging.info(f"Join confirmation: {response_data['content']}")
-
+                    player_id = response_data['player_id']
+                    logging.info(f"Join confirmation: {response_data['content']}")  
+                if exit_game:
+                    break
+            if exit_game:
+                break
             # If a second player hasn't joined, don't prompt for action
-            if not player_ready:
+            if not player_ready or response_data["type"] == "waiting" :
                 continue  # Keep waiting for another player to join
+            # Only prompt for action if a question has been received
+            if player_ready and question_received:
+                msg_type = input("Enter action (answer, quit): ").lower()
+                if msg_type == "quit":
+                    quit_message = create_message("quit", player_id, "Goodbye!")
+                    client_socket.sendall((quit_message + "\n").encode('utf-8'))
+                    exit_game = True
+                    break
 
-            # Get the next action (answer or quit)
-            msg_type = input("Enter action (answer, quit): ").lower()
-            if msg_type == "quit":
-                quit_message = create_message("quit", player_id, "Goodbye!")
-                client_socket.sendall((quit_message + "\n").encode('utf-8'))
-                logging.info(f"Sent quit message: {quit_message}")
-                break  # Exit the loop and quit the game
+                elif msg_type == "answer":
+                    answer = input("Enter your answer: ")
+                    answer_message = create_message("answer", player_id, answer)
+                    client_socket.sendall((answer_message + "\n").encode('utf-8'))
 
-            elif msg_type == "answer":
-                question_id = input("Enter question ID: ")
-                answer = input("Enter your answer: ")
-                answer_message = create_message("answer", player_id, {"question_id": question_id, "answer": answer})
-                client_socket.sendall((answer_message + "\n").encode('utf-8'))
-                logging.info(f"Sent answer message: {answer_message}")
+                # Reset the flag for the next question
+                question_received = False                          
 
     except socket.error as e:
         logging.error(f"Socket error occurred: {e}")
