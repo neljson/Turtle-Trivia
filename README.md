@@ -60,23 +60,25 @@ The server enforces turn-based gameplay, where each player must wait for the oth
 Score Updates: After each trivia question, the server broadcasts the current game score tally, keeping both players up-to-date on each other's scores and progress.
 
 3. Disconnection Alerts
-Player Disconnection: If one player disconnects during gameplay, the server alerts the other player after their next action with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status and prevents potential confusion during disconnections.
+Player Disconnection: If one player disconnects during gameplay, the server alerts the other player after their next action with the message `"Player {player_name} has left the game."` This notification ensures the remaining player knows the game's status. The player must wait for a new player to join if they wish to continue playing the game.
 
 4. Player Identification
-Username and Player ID: When joining the game, each player can enter a unique username, which is displayed to both players. Additionally, each player is assigned a unique Player ID, allowing for individualized responses and easy identification.
+Username and Player ID: When joining the game, each player can enter a unique username, which is displayed to both players. Additionally, each player is assigned a unique Player ID.
 
 6. Win Condition Tracking
 Winning the Game: The server actively tracks each player's score, with the first player to answer 5 questions correctly declared the winner. Once a player wins, the game concludes, and the server announces the winner to both players.
 
 7. Game Lobby:
-If one player joins first, a broadcast message is displayed `Waiting for another player to join...`. The first joining playe will need to wait until the other player has joined before proceeding. Once both players are connected, the game proceeds. 
+If one player joins first, a broadcast message is displayed `Waiting for another player to join...`. The first joining player will need to wait until the other player has joined before proceeding. Once both players are connected, the game proceeds.
+
+8. `question_bank.py` repository of trivia questions
+A separate python file was created to hold a list of trivia questions, 4 choices (a,b,c,d), and the correct answer. The server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
 
 #### TODO 
-1. Currently, the server picks questions sequentially starting from question 1. It uses the variable `current_question_index` to track the current question, which is incremented after each question is asked. This means that players will receive questions in the order they appear in the questions list from `question_bank.py`
-2. Currently, I've only researched and created 6 turtle trivia questions along with their resulting answers and answer choice options. For the rest of the questions in the `question_bank.py`, I've placed placeholder text. The rest of the questions and answer choices will be filled out in the future.
-3. The game needs to broadcast a message to both players at the very start of the game to establish rules and the win condition, so both players know how to play the game.
-4. Currently, both players can only give an action input of either 'answer' to proceed with answering the question or 'quit' to quit the game. It is not able to handle inputs other than these two choices. For the future, will need to provide error handling/input validation and re-prompt the user should they enter a response other than 'answer' or 'quit'.
-5. A timeout feature needs to be added should one of the players take an excessively long to answer a question. 
+1. Currently, I've only researched and created 6 turtle trivia questions along with their resulting answers and answer choice options. For the rest of the questions in the `question_bank.py`, I've placed placeholder text. The rest of the questions and answer choices will be filled out in the future.
+2. The game needs to broadcast a message to both players at the very start of the game to establish rules and the win condition, so both players know how to play the game.
+3. Currently, both players can only give an action input of either 'answer' to proceed with answering the question or 'quit' to quit the game. It is not able to handle inputs other than these two choices. For the future, will need to provide error handling/input validation and re-prompt the user should they enter a response other than 'answer' or 'quit'.
+4. A timeout feature needs to be added should one of the players take an excessively long to answer a question. 
 
 -------------
 
