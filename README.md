@@ -6,7 +6,7 @@ Description: A terminal trivia game using Python socket programming
 
 ## How to Run
 
-First start the server then run the client. If you run the client without any command-line arguments, it will default to connecting to localhost on port 12345. However, it is recommended
+First start the server then run the client. If you run the client without any command-line arguments, it will default to connecting to `localhost` on `port 12345`. However, you may also choose 
 to run the client and server by specifying a host and port number:
 
 ```sh
