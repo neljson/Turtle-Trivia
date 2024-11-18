@@ -12,6 +12,7 @@ to run the client and server by specifying a host and port number with following
 ```sh
   -p PORT, --port PORT  Port number the server should listen on (default is 12345)
   -i IP, --ip IP        IP address the server should bind to (default is localhost)
+  -n DNS, --dns DNS     DNS name of the server (option only available to the client)
 ```
 
 Example of starting the server:
@@ -58,10 +59,13 @@ python3 client.py -n localhost
 
 **Features added this sprint:**
 
-1. CLI options when running server.py and client.py. When "-h" option is passed in the CLI, the user will be greeted with:
+1. **CLI options**
+  
+- when running server.py and client.py. When "-h" option is passed in the CLI, the user will be greeted with:
   ```sh
     -p PORT, --port PORT  Port number the server should listen on (default is 12345)
     -i IP, --ip IP        IP address the server should bind to (default is localhost)
+    -n DNS, --dns DNS     DNS name of the server (option only available to the client)
   ```
   Example of starting the server:
   
@@ -78,8 +82,21 @@ python3 client.py -n localhost
   ```sh
   python3 client.py -n localhost
   ```
-2. 
+2. **User friendly experience/quality of life improvement**
+- Win condition checking, player status, game state tracking, and score tally display info were already added in the previous sprint. However, in order to improve user experience, the 'action' prompt has now been removed. Instead, the player can enter their answer immediately after each question prompt.
 
+4. **UX improment: re-connect play again status**
+- In the previous iteration, each user can enter 'y' to play again once the game has ended. However, the terminal hangs upon player input. Now a visual feedback is displayed to users that the game has received their input and is awaiting for the other player to input their response.
+
+5. **help rules option and quit option added**
+- After each question prompt, the user now can ask for help by entering 'help' to display the rules of the game. If the user wishes the quit the game, they can also enter 'quit'
+  
+6. **Input handling**
+- Previously, if the user enters anything but a valid input at each question prompt the terminal hangs and the game becomes frozen. Now, input validation checks have been added. If the user enters an invalid input, they will be re-prompted to enter a valid input. 
+
+**TODO**
+1. Ran out of time this sprint to make any forward progress since last sprint on trivia question bank. Intend to finish researching and creating questions on the last sprint.
+2. After each question prompt, the game should display the correct answer to each user
 
 -------------
 
