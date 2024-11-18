@@ -7,22 +7,28 @@ Description: A terminal trivia game using Python socket programming
 ## How to Run
 
 First start the server then run the client. If you run the client without any command-line arguments, it will default to connecting to `localhost` on `port 12345`. However, you may also choose 
-to run the client and server by specifying a host and port number:
+to run the client and server by specifying a host and port number with following options and their respective arguments:
 
 ```sh
-python3 server.py <host> <port>
-python3 client.py <host> <port>
+  -p PORT, --port PORT  Port number the server should listen on (default is 12345)
+  -i IP, --ip IP        IP address the server should bind to (default is localhost)
+  -n DNS, --dns DNS     DNS name of the server (option only available to the client)
 ```
 
 Example of starting the server:
 
 ```sh
- python3 server.py 127.0.0.1 8080
+ python3 server.py -p 8080
 ```
-Example of starting the client:
+Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
 
 ```sh
-python3 client.py 127.0.0.1 8080
+python3 client.py -i 0.0.0.0 -p 8080
+```
+Additionally, the client may connect to a specified DNS server name:
+
+```sh
+python3 client.py -n localhost
 ```
 
 **How to play:**
@@ -31,7 +37,7 @@ python3 client.py 127.0.0.1 8080
 3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the player with the most correct answers wins!
 
 **Rules and Logistics**
-* The game will be interfaced via the terminal. 
+* All game interactions are within the terminal. 
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
 * The same question will be presented to both clients. The server will wait until both players respond before proceeding. 
@@ -46,6 +52,55 @@ python3 client.py 127.0.0.1 8080
 
 **Additional resources:**
 * N/A
+
+-------------
+
+## Sprint 4 (11-17-24)
+
+**Features added this sprint:**
+
+1. **CLI options**
+  
+- When running server.py and client.py, the "-h" option may be passed in the CLI. Upon doing so, the user will be greeted with:
+  ```sh
+    -p PORT, --port PORT  Port number the server should listen on (default is 12345)
+    -i IP, --ip IP        IP address the server should bind to (default is localhost)
+    -n DNS, --dns DNS     DNS name of the server (option only available to the client)
+  ```
+  Example of starting the server:
+  
+  ```sh
+   python3 server.py -p 8080
+  ```
+  Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
+  
+  ```sh
+  python3 client.py -i 0.0.0.0 -p 8080
+  ```
+  Additionally, the client may connect to a specified DNS server name:
+  
+  ```sh
+  python3 client.py -n localhost
+  ```
+- The user can still run the server and client without passing any options/CLI arguments. ```python3 server.py``` and ```python3 client.py``` will default to running on ```localhost``` (IP of ```0.0.0.0.0```) on port ```12345```
+  
+2. **User friendly experience/quality of life improvement**
+- Win condition checking, player status, game state tracking, and score tally display info were already added in the previous sprint. However, in order to improve user experience, the 'action' prompt has now been removed. Instead, the player can enter their answer immediately after each question prompt.
+
+4. **UX improment: re-connect play again status**
+- In the previous iteration, each user can enter 'y' to play again once the game has ended. However, the terminal hangs upon player input. Now a visual feedback is displayed to users that the game has received their input and is awaiting for the other player to input their response.
+
+5. **Help rules option and Quit option added**
+- After each question prompt, the user now can ask for help by entering 'help' to display the rules of the game. If the user wishes the quit the game, they can also enter 'quit'
+  
+6. **Input handling**
+- Previously, if the user enters anything but a valid input at each question prompt the terminal hangs and the game becomes frozen. Now, input validation checks have been added. If the user enters an invalid input, they will be re-prompted to enter a valid input: ```Invalid input. Please enter 'a', 'b', 'c', 'd', 'help', or 'quit'.```
+- Input handling has also been added upon the game over screen. Each player can only respond using 'y' or 'n' when asked if they wish to play again. Entering a respond other than these two options will also result in a display output re-prompting the user to enter a valid input. 
+
+**TODO**
+1. Ran out of time this sprint to make any forward progress since last sprint on trivia question bank. Intend to finish researching and creating questions on the last sprint.
+2. After each question prompt, the game should display the correct answer to each user
+3. A 30 second timer will need to implemented. If the player takes longer than 30 seconds to answer a question, they will automatically be given an incorrect score.  
 
 -------------
 
