@@ -92,7 +92,8 @@ python3 client.py -n localhost
 - After each question prompt, the user now can ask for help by entering 'help' to display the rules of the game. If the user wishes the quit the game, they can also enter 'quit'
   
 6. **Input handling**
-- Previously, if the user enters anything but a valid input at each question prompt the terminal hangs and the game becomes frozen. Now, input validation checks have been added. If the user enters an invalid input, they will be re-prompted to enter a valid input. 
+- Previously, if the user enters anything but a valid input at each question prompt the terminal hangs and the game becomes frozen. Now, input validation checks have been added. If the user enters an invalid input, they will be re-prompted to enter a valid input: ```Invalid input. Please enter 'a', 'b', 'c', 'd', 'help', or 'quit'.```
+- Input handling has also been added upon the game over screen. Each player can only respond using 'y' or 'n' when asked if they wish to play again. Entering a respond other than these two options will also result in a display output re-prompting the user to enter a valid input. 
 
 **TODO**
 1. Ran out of time this sprint to make any forward progress since last sprint on trivia question bank. Intend to finish researching and creating questions on the last sprint.
