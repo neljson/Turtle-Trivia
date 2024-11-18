@@ -88,7 +88,7 @@ python3 client.py -n localhost
 4. **UX improment: re-connect play again status**
 - In the previous iteration, each user can enter 'y' to play again once the game has ended. However, the terminal hangs upon player input. Now a visual feedback is displayed to users that the game has received their input and is awaiting for the other player to input their response.
 
-5. **help rules option and quit option added**
+5. **Help rules option and Quit option added**
 - After each question prompt, the user now can ask for help by entering 'help' to display the rules of the game. If the user wishes the quit the game, they can also enter 'quit'
   
 6. **Input handling**
