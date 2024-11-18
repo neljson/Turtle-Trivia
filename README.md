@@ -61,7 +61,7 @@ python3 client.py -n localhost
 
 1. **CLI options**
   
-- when running server.py and client.py. When "-h" option is passed in the CLI, the user will be greeted with:
+- When running server.py and client.py, the "-h" option may be passed in the CLI. Upon doing so, the user will be greeted with:
   ```sh
     -p PORT, --port PORT  Port number the server should listen on (default is 12345)
     -i IP, --ip IP        IP address the server should bind to (default is localhost)
