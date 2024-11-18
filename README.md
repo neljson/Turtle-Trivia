@@ -7,22 +7,27 @@ Description: A terminal trivia game using Python socket programming
 ## How to Run
 
 First start the server then run the client. If you run the client without any command-line arguments, it will default to connecting to `localhost` on `port 12345`. However, you may also choose 
-to run the client and server by specifying a host and port number:
+to run the client and server by specifying a host and port number with following options and their respective arguments:
 
 ```sh
-python3 server.py <host> <port>
-python3 client.py <host> <port>
+  -p PORT, --port PORT  Port number the server should listen on (default is 12345)
+  -i IP, --ip IP        IP address the server should bind to (default is localhost)
 ```
 
 Example of starting the server:
 
 ```sh
- python3 server.py 127.0.0.1 8080
+ python3 server.py -p 8080
 ```
-Example of starting the client:
+Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
 
 ```sh
-python3 client.py 127.0.0.1 8080
+python3 client.py -i 0.0.0.0 -p 8080
+```
+Additionally, the client may connect to a specified DNS server name:
+
+```sh
+python3 client.py -n localhost
 ```
 
 **How to play:**
@@ -46,6 +51,35 @@ python3 client.py 127.0.0.1 8080
 
 **Additional resources:**
 * N/A
+
+-------------
+
+## Sprint 4 (11-17-24)
+
+**Features this sprint:**
+
+1. CLI options when running server.py and client.py. When "-h" option is passed in the CLI, the user will be greeted with:
+- ```sh
+  -p PORT, --port PORT  Port number the server should listen on (default is 12345)
+  -i IP, --ip IP        IP address the server should bind to (default is localhost)
+```
+Example of starting the server:
+
+```sh
+ python3 server.py -p 8080
+```
+Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
+
+```sh
+python3 client.py -i 0.0.0.0 -p 8080
+```
+Additionally, the client may connect to a specified DNS server name:
+
+```sh
+python3 client.py -n localhost
+```
+2. 
+
 
 -------------
 
