@@ -56,28 +56,28 @@ python3 client.py -n localhost
 
 ## Sprint 4 (11-17-24)
 
-**Features this sprint:**
+**Features added this sprint:**
 
 1. CLI options when running server.py and client.py. When "-h" option is passed in the CLI, the user will be greeted with:
-- ```sh
-  -p PORT, --port PORT  Port number the server should listen on (default is 12345)
-  -i IP, --ip IP        IP address the server should bind to (default is localhost)
-```
-Example of starting the server:
-
-```sh
- python3 server.py -p 8080
-```
-Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
-
-```sh
-python3 client.py -i 0.0.0.0 -p 8080
-```
-Additionally, the client may connect to a specified DNS server name:
-
-```sh
-python3 client.py -n localhost
-```
+  ```sh
+    -p PORT, --port PORT  Port number the server should listen on (default is 12345)
+    -i IP, --ip IP        IP address the server should bind to (default is localhost)
+  ```
+  Example of starting the server:
+  
+  ```sh
+   python3 server.py -p 8080
+  ```
+  Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
+  
+  ```sh
+  python3 client.py -i 0.0.0.0 -p 8080
+  ```
+  Additionally, the client may connect to a specified DNS server name:
+  
+  ```sh
+  python3 client.py -n localhost
+  ```
 2. 
 
 
