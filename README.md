@@ -30,6 +30,7 @@ Additionally, the client may connect to a specified DNS server name:
 ```sh
 python3 client.py -n localhost
 ```
+If no options are given, the server and client will start on localhost on port 12345 by default. 
 
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
