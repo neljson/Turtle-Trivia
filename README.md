@@ -100,7 +100,8 @@ python3 client.py -n localhost
 **TODO**
 1. Ran out of time this sprint to make any forward progress since last sprint on trivia question bank. Intend to finish researching and creating questions on the last sprint.
 2. After each question prompt, the game should display the correct answer to each user
-3. A 30 second timer will need to implemented. If the player takes longer than 30 seconds to answer a question, they will automatically be given an incorrect score.  
+3. A 30 second timer will need to implemented. If the player takes longer than 30 seconds to answer a question, they will automatically be given an incorrect score.
+4. Fix minor display output issue with welcome message displaying in wrong order when the following conditions are met: one player wishes to continue playing the game, other player quits, a new player rejoins the game. New player correctly receives welcome broadcast message before question prompt; however, original player receives the welcome message after their question prompt. 
 
 -------------
 
