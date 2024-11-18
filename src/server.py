@@ -25,7 +25,7 @@ restart_votes = {}  # Track responses to the restart question
 restart_votes_count = 0
 
 # Score required to end the game
-WINNING_SCORE = 1
+WINNING_SCORE = 5
 TOTAL_QUESTIONS = 20
 
 
