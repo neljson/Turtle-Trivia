@@ -22,7 +22,7 @@ current_question_index = 0  # Track the current question for both players
 scores = {1: 0, 2: 0}  # Keep track of each player's score
 unanswered_questions = []  # List to store unanswered questions
 restart_votes = {}  # Track responses to the restart question
-restart_votes_count=0
+restart_votes_count = 0
 
 # Score required to end the game
 WINNING_SCORE = 1
@@ -74,17 +74,18 @@ def handle_client(client_socket):
 
 # Handle `restart` responses from players
 def handle_restart(client_socket, message):
+    global restart_votes_count
     player_id = message["player_id"]
     restart_response = message["content"].lower()
-    scores[player_id]=0
-    answers_received[player_id] =False
+    scores[player_id] = 0
+    answers_received[player_id] = False
     # Record the player's vote
     restart_votes[player_id] = restart_response
-    restart_votes_count = restart_votes_count+1
+    restart_votes_count = restart_votes_count + 1
     logging.info(f"Player {players[player_id]['name']} chose to {'restart' if restart_response == 'y' else 'quit'}.")
 
     # Check if all players have responded
-    if len(restart_votes_count) > 1:
+    if restart_votes_count > 1:
         if all(vote == 'y' for vote in restart_votes.values()):
             reset_game()
         # else:
