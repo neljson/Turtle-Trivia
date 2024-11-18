@@ -30,7 +30,6 @@ Additionally, the client may connect to a specified DNS server name:
 ```sh
 python3 client.py -n localhost
 ```
-If no options are given, the server and client will start on localhost on port 12345 by default. 
 
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
@@ -38,7 +37,7 @@ If no options are given, the server and client will start on localhost on port 1
 3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the player with the most correct answers wins!
 
 **Rules and Logistics**
-* The game will be interfaced via the terminal. 
+* All game interactions are within the terminal. 
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
 * The same question will be presented to both clients. The server will wait until both players respond before proceeding. 
@@ -98,6 +97,7 @@ If no options are given, the server and client will start on localhost on port 1
 **TODO**
 1. Ran out of time this sprint to make any forward progress since last sprint on trivia question bank. Intend to finish researching and creating questions on the last sprint.
 2. After each question prompt, the game should display the correct answer to each user
+3. A 30 second timer will need to implemented. If the player takes longer than 30 seconds to answer a question, they will automatically be given an incorrect score.  
 
 -------------
 
