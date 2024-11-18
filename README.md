@@ -82,6 +82,8 @@ python3 client.py -n localhost
   ```sh
   python3 client.py -n localhost
   ```
+- The user can still run the server and client without passing any options/CLI arguments. ```python3 server.py``` and ```python3 client.py``` will default to running on ```localhost``` (IP of ```0.0.0.0.0```) on port ```12345```
+  
 2. **User friendly experience/quality of life improvement**
 - Win condition checking, player status, game state tracking, and score tally display info were already added in the previous sprint. However, in order to improve user experience, the 'action' prompt has now been removed. Instead, the player can enter their answer immediately after each question prompt.
 
