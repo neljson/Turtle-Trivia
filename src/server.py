@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
+import argparse
+import sys
 import socket
 import selectors
 import logging
 import json
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from question_bank import questions  # Import questions from the question bank
 
 # Set up logging for debugging purposes
@@ -18,11 +22,12 @@ current_question_index = 0  # Track the current question for both players
 scores = {1: 0, 2: 0}  # Keep track of each player's score
 unanswered_questions = []  # List to store unanswered questions
 restart_votes = {}  # Track responses to the restart question
-
+restart_votes_count=0
 
 # Score required to end the game
-WINNING_SCORE = 5
+WINNING_SCORE = 1
 TOTAL_QUESTIONS = 20
+
 
 # Function to handle accepting new client connections
 def accept_connection(server_socket):
@@ -66,6 +71,7 @@ def handle_client(client_socket):
         logging.error(f"Socket error: {e}")
         handle_disconnection(client_socket)
 
+
 # Handle `restart` responses from players
 def handle_restart(client_socket, message):
     player_id = message["player_id"]
@@ -74,14 +80,24 @@ def handle_restart(client_socket, message):
     answers_received[player_id] =False
     # Record the player's vote
     restart_votes[player_id] = restart_response
+    restart_votes_count = restart_votes_count+1
     logging.info(f"Player {players[player_id]['name']} chose to {'restart' if restart_response == 'y' else 'quit'}.")
 
     # Check if all players have responded
-    if len(restart_votes) > 1:
+    if len(restart_votes_count) > 1:
         if all(vote == 'y' for vote in restart_votes.values()):
             reset_game()
-        else:
-            broadcast_message(json.dumps({"type": "end_session", "content": "Thank you for playing! Goodbye."}))
+        # else:
+        #     broadcast_message(json.dumps({"type": "end_session", "content": "Thank you for playing! Goodbye."}))
+    else :
+        # Notify the player to wait for the other player
+        response = {
+            "type": "waiting",
+            "player_id": player_id,
+            "content": "Waiting for the other player to respond..."
+        }
+        players[player_id]["socket"].sendall((json.dumps(response)+ "\n").encode('utf-8'))
+
 
 # Reset game state to start a new game session
 def reset_game():
@@ -100,7 +116,7 @@ def end_game():
     if len(winners) == 1:
         # Only one player with the highest score
         winner_name = players[winners[0]]['name']
-        broadcast_message(f"{winner_name} is the first to answer 5 questions correctly. {winner_name} wins!")
+        broadcast_message(f"{winner_name} is the first to answer 5 questions correctly. {winner_name} wins! 🐢 🐢 🐢 🐢 🐢")
     else:
         # Multiple players tied with the highest score
         winner_names = " and ".join(players[player_id]['name'] for player_id in winners)
@@ -154,6 +170,7 @@ def handle_join(client_socket, message):
         broadcast_message(f"Player {player_name} has joined the game!", exclude_player=None)
         send_question_to_players()
 
+
 # Function to send the current question to both players
 def send_question_to_players():
     global current_question_index
@@ -180,6 +197,7 @@ def send_question_to_players():
             logging.info("Reusing an unanswered question for both players.")
         else:
             end_game()  # End the game if no unanswered questions are left
+
 
 # Handle a player's answer to a trivia question
 def handle_answer(client_socket, message):
@@ -236,7 +254,7 @@ def handle_answer(client_socket, message):
             response = {
                 "type": "waiting",
                 "player_id": player_id,
-                "content": "Waiting for the other player to answer."
+                "content": "Waiting for the other player to answer..."
             }
             client_socket.sendall((json.dumps(response)+ "\n").encode('utf-8'))
 
@@ -315,16 +333,29 @@ def start_server(host, port):
         logging.info("Server has been shut down.")
 
 
+def main():
+     # Set up argument parsing
+    parser = argparse.ArgumentParser(description="Start a server to handle connections.")
+    parser.add_argument(
+        "-p", "--port",
+        type=int,
+        default=12345,
+        help="Port number the server should listen on (default is 12345)"
+    )
+    parser.add_argument(
+        "-i", "--ip",
+        type=str,
+        default="0.0.0.0",
+        help="IP address the server should bind to (default is localhost)"
+    )
+    
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Start the server with the specified IP and port
+    start_server(args.ip, args.port)
+
+
 # Entry point to start the server
 if __name__ == "__main__":
-    import sys
-
-    host = "localhost"
-    port = 12345
-
-    # Allow specifying a host and port as command-line arguments
-    if len(sys.argv) == 3:
-        host = sys.argv[1]
-        port = int(sys.argv[2])
-
-    start_server(host, port)
+    main()
