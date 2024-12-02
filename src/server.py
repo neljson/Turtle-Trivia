@@ -345,6 +345,7 @@ def broadcast_message(message, exclude_player=None):
     for player_id, player_info in players.items():
         if player_id != exclude_player:
             try:
+                logging.info(f"sending {message} to {player_id} ")
                 player_info["socket"].sendall(encrypt_message(json.dumps({
                     "type": "broadcast",
                     "content": message
