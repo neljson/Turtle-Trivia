@@ -7,11 +7,34 @@ import selectors
 import logging
 import json
 import os
+import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from question_bank import questions  # Import questions from the question bank
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.backends import default_backend
 
-# Set up logging for debugging purposes
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Set up logging with separate handlers for console and file
+log_file = os.path.join(os.path.dirname(__file__), 'error_logs')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+# Console handler (for all log levels)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+
+# File handler (only for ERROR level logs)
+file_handler = logging.FileHandler(log_file)
+file_handler.setLevel(logging.ERROR)
+file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(file_formatter)
+
+# Add handlers to the logger
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
 
 # Initialize a selector to manage multiple client connections
 sel = selectors.DefaultSelector()
@@ -22,12 +45,43 @@ current_question_index = 0  # Track the current question for both players
 scores = {1: 0, 2: 0}  # Keep track of each player's score
 unanswered_questions = []  # List to store unanswered questions
 restart_votes = {}  # Track responses to the restart question
-restart_votes_count = 0
+restart_votes_count=0
+should_start_new_game =True
 
 # Score required to end the game
 WINNING_SCORE = 5
 TOTAL_QUESTIONS = 20
 
+# Shared symmetric key (both client and server must use the same key)
+SECRET_KEY = b'1234567890abcdef'  # 16 bytes for AES-128
+
+# AES block size
+BLOCK_SIZE = 128
+
+def encrypt_message(message: str) -> bytes:
+    # Encrypt the message using AES
+    iv = os.urandom(16)  # Generate a random IV
+    cipher = Cipher(algorithms.AES(SECRET_KEY), modes.CBC(iv), backend=default_backend())
+    encryptor = cipher.encryptor()
+    padder = padding.PKCS7(BLOCK_SIZE).padder()
+
+    padded_data = padder.update(message.encode()) + padder.finalize()
+    ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+
+    # Return IV + ciphertext (IV is needed for decryption)
+    return iv + ciphertext
+
+def decrypt_message(encrypted_message: bytes) -> str:
+    # Decrypt the message using AES
+    iv = encrypted_message[:16]  # Extract IV
+    ciphertext = encrypted_message[16:]  # Extract ciphertext
+    cipher = Cipher(algorithms.AES(SECRET_KEY), modes.CBC(iv), backend=default_backend())
+    decryptor = cipher.decryptor()
+    unpadder = padding.PKCS7(BLOCK_SIZE).unpadder()
+
+    padded_data = decryptor.update(ciphertext) + decryptor.finalize()
+    plaintext = unpadder.update(padded_data) + unpadder.finalize()
+    return plaintext.decode('utf-8', errors='ignore')
 
 # Function to handle accepting new client connections
 def accept_connection(server_socket):
@@ -46,8 +100,10 @@ def handle_client(client_socket):
 
     try:
         data = client_socket.recv(1024)  # Receive data from client
+        logging.info(data)
         if data:
-            message = json.loads(data.decode('utf-8'))
+            decrypted_message = decrypt_message(data)  # Decrypt the received message
+            message = json.loads(decrypted_message)
             logging.info(f"Received message: {message}")
 
             # Process the incoming message
@@ -62,7 +118,7 @@ def handle_client(client_socket):
                 handle_quit(client_socket, message)
 
             elif msg_type == "restart":
-                handle_restart(client_socket, message)
+                handle_restart(message)
 
         else:
             # No data means the client has disconnected
@@ -71,25 +127,26 @@ def handle_client(client_socket):
         logging.error(f"Socket error: {e}")
         handle_disconnection(client_socket)
 
-
 # Handle `restart` responses from players
-def handle_restart(client_socket, message):
-    global restart_votes_count
+def handle_restart(message):
+    global restart_votes_count,should_start_new_game
     player_id = message["player_id"]
     restart_response = message["content"].lower()
-    scores[player_id] = 0
-    answers_received[player_id] = False
+    scores[player_id]=0
+    answers_received[player_id] =False
     # Record the player's vote
     restart_votes[player_id] = restart_response
-    restart_votes_count = restart_votes_count + 1
+    restart_votes_count = restart_votes_count+1
     logging.info(f"Player {players[player_id]['name']} chose to {'restart' if restart_response == 'y' else 'quit'}.")
+    if restart_response == 'n':
+        should_start_new_game = False
 
     # Check if all players have responded
-    if restart_votes_count > 1:
-        if all(vote == 'y' for vote in restart_votes.values()):
-            reset_game()
-        # else:
-        #     broadcast_message(json.dumps({"type": "end_session", "content": "Thank you for playing! Goodbye."}))
+    if (restart_votes_count) > 1:
+        if not should_start_new_game:
+            broadcast_message(json.dumps({"type": "end_session", "content": "The game session has ended as a player chose not to restart. Goodbye!"}))
+        reset_game()
+            
     else :
         # Notify the player to wait for the other player
         response = {
@@ -97,17 +154,24 @@ def handle_restart(client_socket, message):
             "player_id": player_id,
             "content": "Waiting for the other player to respond..."
         }
-        players[player_id]["socket"].sendall((json.dumps(response)+ "\n").encode('utf-8'))
-
+        players[player_id]["socket"].sendall(encrypt_message(json.dumps(response)+ "||END||"))
 
 # Reset game state to start a new game session
 def reset_game():
-    global current_question_index
+    global current_question_index, restart_votes_count,should_start_new_game
     restart_votes.clear()
-    current_question_index =0
-    unanswered_questions.clear() 
-    logging.info("Game has been reset. Starting a new game session.")
-    send_question_to_players()
+    restart_votes_count = 0
+    current_question_index = 0
+    unanswered_questions.clear()
+    logging.info("Game state has been reset.")
+    
+    if should_start_new_game:
+        logging.info("Starting a new game session.")
+        send_question_to_players()
+    else:
+        logging.info("Game session has ended, not starting a new game.")
+    should_start_new_game = True
+
 
 # End the game and announce the winner
 def end_game():
@@ -117,11 +181,12 @@ def end_game():
     if len(winners) == 1:
         # Only one player with the highest score
         winner_name = players[winners[0]]['name']
-        broadcast_message(f"{winner_name} is the first to answer 5 questions correctly. {winner_name} wins! 🐢 🐢 🐢 🐢 🐢")
+        broadcast_message(f"{winner_name} is the first to answer {WINNING_SCORE} questions correctly. {winner_name} wins!")
     else:
         # Multiple players tied with the highest score
         winner_names = " and ".join(players[player_id]['name'] for player_id in winners)
         broadcast_message(f"It's a tie! Both {winner_names} win with the highest score!")
+    time.sleep(1)
     # Ask if players want to play again
     broadcast_message("Do you wish to play again? (y/n):")
 
@@ -149,7 +214,7 @@ def handle_join(client_socket, message):
         "player_id": player_id,
         "content": f"Welcome {player_name}, your Player ID is {player_id}."
     }
-    client_socket.sendall((json.dumps(response) + "\n").encode('utf-8'))  # Send the join message to the new player
+    client_socket.sendall(encrypt_message(json.dumps(response) + "||END||"))  # Send the join message to the new player
     logging.info(f"Player {player_name} (ID: {player_id}) joined the game.")
 
     # Check if this is the first player or second player joining
@@ -159,7 +224,7 @@ def handle_join(client_socket, message):
             "type": "waiting_for_player",
             "content": "Waiting for another player to join..."
         }
-        client_socket.sendall((json.dumps(waiting_message) + "\n").encode('utf-8'))
+        client_socket.sendall(encrypt_message(json.dumps(waiting_message) + "||END||"))
     else:
         restart_votes.clear()
         current_question_index =0
@@ -169,8 +234,8 @@ def handle_join(client_socket, message):
             scores[player_id]=0  # Reset answers received
         # If this is the second player, notify all players that the game can begin
         broadcast_message(f"Player {player_name} has joined the game!", exclude_player=None)
+        time.sleep(1)  # Adds a 1000ms delay to ensure message is processed
         send_question_to_players()
-
 
 # Function to send the current question to both players
 def send_question_to_players():
@@ -190,15 +255,14 @@ def send_question_to_players():
         if unanswered_questions:
             question_data = unanswered_questions.pop(0)  # Reuse the first unanswered question
             question_message = {
-                "type": "question",
-                "question": question_data["question"],
-                "options": question_data["options"]
+                'type': 'question',
+                'question': question_data["question"],
+                'options': question_data["options"]
             }
             broadcast_message(json.dumps(question_message))
             logging.info("Reusing an unanswered question for both players.")
         else:
             end_game()  # End the game if no unanswered questions are left
-
 
 # Handle a player's answer to a trivia question
 def handle_answer(client_socket, message):
@@ -219,11 +283,14 @@ def handle_answer(client_socket, message):
         if all(answers_received.values()) and len(answers_received) == 2:
             # Prepare the broadcast message
             current_scores = '\n'.join(f"{players[p_id]['name']}: {scores[p_id]} out of {WINNING_SCORE}" for p_id in players)
+            commentary = "\n".join(
+                f"{player['name']} answered {'correctly' if player['correct'] else 'incorrectly'}!"
+                for _, player in players.items()
+            )
             results_message = {
-                "type": "score_update",
-                "commentary":" ".join(f"{player['name']} answered {'correctly' if player['correct'] else'incorrectly'}!"
-                        for _, player in players.items()),
-                "currentScore": f"Current Score:\n{current_scores}"
+                'type': 'score_update',
+                'commentary': f"{commentary}\nThe correct answer was: '{correct_answer}'",
+                'currentScore': f"Current Score:\n{current_scores}"
             }
             broadcast_message(json.dumps(results_message))
             # Reset answers for both players
@@ -248,6 +315,7 @@ def handle_answer(client_socket, message):
             else:
                 # Move to the next question if no one has won yet
                 current_question_index += 1
+                time.sleep(1)
                 send_question_to_players()
 
         else:
@@ -257,7 +325,8 @@ def handle_answer(client_socket, message):
                 "player_id": player_id,
                 "content": "Waiting for the other player to answer..."
             }
-            client_socket.sendall((json.dumps(response)+ "\n").encode('utf-8'))
+            
+            client_socket.sendall(encrypt_message(json.dumps(response)+ "||END||"))
 
 
 # Handle a player quitting the game
@@ -276,10 +345,10 @@ def broadcast_message(message, exclude_player=None):
     for player_id, player_info in players.items():
         if player_id != exclude_player:
             try:
-                player_info["socket"].sendall((json.dumps({
+                player_info["socket"].sendall(encrypt_message(json.dumps({
                     "type": "broadcast",
                     "content": message
-                }) + "\n").encode('utf-8'))
+                }) + "||END||"))
             except socket.error as e:
                 logging.error(f"Failed to send broadcast to player {player_id}: {e}")
 
@@ -302,9 +371,19 @@ def handle_disconnection(client_socket):
             del restart_votes[player_id]
             break
 
+def validate_address(ip, port):
+    """Validate if the IP address and port are reachable."""
+    try:
+        with socket.create_connection((ip, port), timeout=5):
+            logging.info(f"Successfully connected to {ip}:{port}.")
+            return True
+    except (socket.gaierror, socket.timeout, ConnectionRefusedError) as e:
+        logging.error(f"Failed to connect to {ip}:{port} - {e}")
+        return False
 
 # Set up the server socket
 def start_server(host, port):
+    """Start the server and validate inputs."""
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -333,7 +412,6 @@ def start_server(host, port):
         server_socket.close()
         logging.info("Server has been shut down.")
 
-
 def main():
      # Set up argument parsing
     parser = argparse.ArgumentParser(description="Start a server to handle connections.")
@@ -355,7 +433,6 @@ def main():
 
     # Start the server with the specified IP and port
     start_server(args.ip, args.port)
-
 
 # Entry point to start the server
 if __name__ == "__main__":
