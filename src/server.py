@@ -184,6 +184,7 @@ def end_game():
         broadcast_message(f"{winner_name} is the first to answer {WINNING_SCORE} questions correctly. {winner_name} wins!")
     else:
         # Multiple players tied with the highest score
+        time.sleep(1)
         winner_names = " and ".join(players[player_id]['name'] for player_id in winners)
         broadcast_message(f"It's a tie! Both {winner_names} win with the highest score!")
     time.sleep(1)
