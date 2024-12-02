@@ -34,7 +34,7 @@ python3 client.py -n localhost
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
 2. **Connect clients:** Run the `client.py` script on two different machines or terminals.
-3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the first player to asnwer 5 correct answers wins!
+3. **Play the game:** Two players are presented with turtle trivia questions. Each player must wait for the other player to respond before proceeding to the next round. The first player to asnwer 5 correct answers wins! A tie will also be announced if both players reach 5 correct answers at the same time. Game will prompt both players to play again.
 
 **Rules and Logistics**
 * All game interactions are within the terminal. 
