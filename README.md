@@ -61,9 +61,11 @@ python3 client.py -n localhost
    - if player does not answer within 20 seconds, they immediately lose that round
 2. **Symmetric encryption**
    - client and server share the same key and messages between client and server are encrypted
-3. **Question bank completed**
+3. **Error logs**
+   - Errors are logged to an `error_logs` file, saved in the current directory of the server and client files. 
+5. **Question bank completed**
    - 20 trivia question bank has been completed
-4. **Correct answer display**
+6. **Correct answer display**
    - After each round, in addition to the game score being displayed, the correct answer is also displayed to each player after each round
   
 **Security issues and concerns**
