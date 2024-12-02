@@ -83,13 +83,13 @@ def start_client(host, port):
         while not exit_game: 
             # Receive data from the server, appending to buffer
             encrypted_data = client_socket.recv(1024)
-            # print encrypted date for demo purposes only:
+            ## print encrypted date for demo purposes only:
             # print("encrypted data is below")
             # print(encrypted_data)
             if encrypted_data:
                 buffer += encrypted_data
             decrypted_message = decrypt_message(buffer)
-            # print decrypted data for demo purposes only:
+            ## print decrypted data for demo purposes only:
             # print("now decrypting this buffer we get")
             # print(decrypted_message)
             # Process all complete messages (split by newline)
