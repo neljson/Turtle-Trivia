@@ -48,7 +48,7 @@ python3 client.py -n localhost
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
 * The same question will be presented to both clients. The server will wait until both players respond before proceeding. 
-* There will be a timeout feature of 30 seconds. If the user has not selected an answer within 20 seconds, that user will not receive any points for that question. The server scores the other responding user and then proceeds to the next question.
+* There will be a timeout feature of 30 seconds. If the user has not selected an answer within 30 seconds, that user will not receive any points for that question. The server scores the other responding user and then proceeds to the next question.
 * The first player to get 5 questions correct will be declared the winner. 
 * A draw will be determined if both users reached 5 correct answers at the same time. 
 
@@ -65,7 +65,7 @@ python3 client.py -n localhost
 
 **Features added this sprint:**
 1. **Timeout feature**
-   - if player does not answer within 20 seconds, they immediately lose that round
+   - if player does not answer within 30 seconds, they immediately lose that round
 2. **Symmetric encryption**
    - client and server share the same key and messages between client and server are encrypted
 3. **Error logs**
