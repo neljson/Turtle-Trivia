@@ -19,6 +19,7 @@ to run the client and server by specifying a host and port number with following
   -p PORT, --port PORT  Port number the server should listen on (default is 12345)
   -i IP, --ip IP        IP address the server should bind to (default is localhost)
   -n DNS, --dns DNS     DNS name of the server (option only available to the client)
+  -h , --help           Display a description of all options and their proper usage
 ```
 
 Example of starting the server:
