@@ -33,14 +33,14 @@ questions = [
         "correct_answer": "d"
     },
     {
-        "question": "Question 4: Where do box turtles primarily live?",
+        "question": "Question 4: What kind of turtle is Master Oogway from the movie 'Kung Fu Panda'?",
         "options": {
-            "a": "Forests and grasslands",
-            "b": "Freshwater lakes",
-            "c": "Tropical oceans",
-            "d": "Deserts"
+            "a": "Green Sea Turtle",
+            "b": "Loggerhead Turtle",
+            "c": "Galápagos Tortoise",
+            "d": "Leatherback Turtle"
         },
-        "correct_answer": "a"
+        "correct_answer": "c"
     },
     {
         "question": "Question 5: Which of these is a common food for most sea turtles?",
@@ -193,13 +193,13 @@ questions = [
         "correct_answer": "b"
     },
     {
-        "question": "Question 20: What kind of turtle is Master Oogway from Kung Fu Panda?",
+        "question": "Question 20: Where do box turtles primarily live? ",
         "options": {
-            "a": "Green Sea Turtle",
-            "b": "Loggerhead Turtle",
-            "c": "Galápagos Tortoise",
-            "d": "Leatherback Turtle"
+            "a": "Forests and grasslands",
+            "b": "Freshwater lakes",
+            "c": "Tropical oceans",
+            "d": "Deserts"
         },
-        "correct_answer": "c"
+        "correct_answer": "a"
     }
 ]
