@@ -34,14 +34,14 @@ python3 client.py -n localhost
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
 2. **Connect clients:** Run the `client.py` script on two different machines or terminals.
-3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the player with the most correct answers wins!
+3. **Play the game:** Two players are presented with 10 turtle questions. After 10 rounds, the first player to asnwer 5 correct answers wins!
 
 **Rules and Logistics**
 * All game interactions are within the terminal. 
 * The server will contain a local repository of trivia questions and their correct answers. 
 * The game will require the connection of two clients or users in order to play the game
 * The same question will be presented to both clients. The server will wait until both players respond before proceeding. 
-* There will be a timeout feature of 30 seconds. If the user has not selected an answer within 30 seconds, that user will not receive any points for that question. The server scores the other responding user and then proceeds to the next question.
+* There will be a timeout feature of 20 seconds. If the user has not selected an answer within 20 seconds, that user will not receive any points for that question. The server scores the other responding user and then proceeds to the next question.
 * The first player to get 5 questions correct will be declared the winner. 
 * A draw will be determined if both users reached 5 correct answers at the same time. 
 
@@ -50,11 +50,25 @@ python3 client.py -n localhost
 * Python
 * Sockets
 
-**Additional resources:**
-* N/A
+**Additional libraries needed:**
+* cryptography
 
 -------------
+## Sprint 5 (12-02-24)
 
+**Features added this sprint:**
+1. **Timeout feature**
+   - if player does not answer within 20 seconds, they immediately lose that round
+2. **Symmetric encryption**
+   - client and server share the same key and messages between client and server are encrypted
+3. **Question bank completed**
+   - 20 trivia question bank has been completed
+4. **Correct answer display**
+   - After each round, in addition to the game score being displayed, the correct answer is also displayed to each player after each round
+  
+**Security issues and concerns**
+* A key security issue in my client and server implementation lies in the lack of input validation and sanitization. For example, user-supplied data like player names, answers, or other content sent in JSON messages are directly processed without validation, making the application vulnerable to malformed inputs or potential exploits like denial-of-service (DoS) attacks or injection attacks. Additionally, the server trusts all data received from clients without verification, which could allow spoofed or malicious messages to disrupt the game state. To address these aforementioned issues, I need to implement robust input validation on both the client and server sides to ensure that all incoming data conforms to expected formats and constraints. Additionally, I would enforce rate limiting or message size limits to prevent flooding attacks, and introduce session management to verify the authenticity of connected clients and maintain a secure state.
+  
 ## Sprint 4 (11-17-24)
 
 **Features added this sprint:**
