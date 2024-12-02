@@ -94,7 +94,7 @@ python3 client.py -n localhost
   ```sh
    python3 server.py -p 8080
   ```
-  Example of starting the client listening on a specified IP address, in this case localhost 0.0.0.0, on port 8080:
+  Example of starting the client listening on a specified IP address, in this case 0.0.0.0, on port 8080:
   
   ```sh
   python3 client.py -i 0.0.0.0 -p 8080
