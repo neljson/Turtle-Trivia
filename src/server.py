@@ -351,7 +351,7 @@ def broadcast_message(message, exclude_player=None):
                     "content": message
                 }) + "||END||"))
             except socket.error as e:
-                logging.error(f"Failed to send broadcast to player {player_id}: {e}")
+                logging.error(f"Disconnection from server or network. Failed to send broadcast to player {player_id}: {e}.")
 
 
 # Handle a client disconnection
