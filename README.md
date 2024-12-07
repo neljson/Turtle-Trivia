@@ -6,6 +6,11 @@ Description: A terminal trivia game using Python socket programming
 
 ## How to Run
 
+Make sure cryptography library is installed as the game uses symmetric encryption between client and server:
+```sh
+pip3 install cryptography
+```
+
 First start the server then run the client by simply running:
 
 ```sh
@@ -52,6 +57,21 @@ python3 client.py -n localhost
 * The first player to get 5 questions correct will be declared the winner. 
 * A draw will be determined if both users reached 5 correct answers at the same time. 
 
+**Implemented Feautres**
+* Server will wait until two players (clients) are connected before game can proceed. The initial player to join will receive a broadcast message, indicating the game is waiting for a second player to join
+* Game will assign a player ID and prompt each user to enter their name
+* Players can enter "help" during the answer prompt if they forget the rules of the game
+* Players can quit at any time by entering "quit" in the answer prompt. The remaining player will be notified that the other player has disconnected.
+* Players will be notified of invalid responses and prompted to enter again
+* After each round of questions, the server will broadcast the current game score of each player as well as the correct answer to the previous question
+* Upon a win or tie, each player will be notified of the winner.
+* Game will prompt each player if they wish to play again.
+* If both players consent, game will restart.
+* If one player consents and the other wishes to exit, the game will notify the remaining player that it is waiting for a new player to join. When a new player has joined, the game will restart.
+
+**Future iterations/Improvements**
+* The biggest limitation to the game is the amount of questions in the question bank (20 questions) and the scope of the questions (turtle/tortoise only)
+* The scope of the questions was far too narrow and limited my ability to create enough unique questions should the game go longer than anticipated for both players. In retrospect, the scope and subject matter of the trivia questions should be broadened.
 
 **Technologies used:**
 * Python
